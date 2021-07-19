@@ -27,13 +27,17 @@ export default async function handler(req, res) {
     const connectionString = `mongodb+srv://cosmos:Hustle@2021@cluster0.hmzfh.mongodb.net/blog-contact?retryWrites=true&w=majority`;
 
     try {
-      client = await MongoClient.connect(connectionString);
+      client = await MongoClient.connect(connectionString, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
     } catch (error) {
+      console.log({ client });
       res.status(500).json({ message: "Could not connect to database." });
       return;
     }
 
-    const db = client.db("blog-post");
+    const db = client.db("blog-contact");
 
     try {
       const result = await db.collection("contact").insertOne(newMessage);
